@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@2.22.0/dist/full.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+
+  <style>
+    body {
+      height: auto;
+      padding: 50px;
+    }
+    .container {
+      margin: 0 auto;
+      max-width: 700px;
+      height: 100px;
+    }
+    .badge {
+      margin-top: 20px;
+      padding: 15px;
+      height:auto;
+      width:100%;
+      overflow: hidden;
+      color: white;
+      font-weight: bold;
+    }
+    .content {
+      display: none;
+      margin: 15px;
+    }
+    .message {
+      margin: 0 20px;
+      padding: 10px;
+      display: none;
+    }
+
+    .headmsg {
+      font-weight: bold;
+      font-size: 25px;
+    }
+    .message .success {
+      background: #d4edda;
+      color: #357042;
+      height: auto;
+      margin: auto;
+      width: 90%;
+      padding: 10px;
+      border-radius: 20px;
+      display: none;
+    }
+    .message .danger {
+      background: #f8d7da;
+      color: #82333a;
+      height: auto;
+      margin: auto;
+      width: 90%;
+      padding: 10px;
+      border-radius: 20px;
+      display: none;
+    }
+    .box {
+      padding: 5px;
+    }
+    .para{
+      word-wrap: break-word;
+    }
+  </style>
+  <body>
+    <div class="container">
+      <div class="form-control w-full max-w-xs">
+        <label class="label">
+          <span class="label-text">Enter the password</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Type here"
+          class="input input-bordered w-full max-w-xs"
+        />
+        <div class="content">
+          <span class="badge"><p class="para"></p></span>
+        </div>
+        <div class="message">
+          <div class="success">
+            <div class="box">
+              <span class="headmsg">Don't worry</span>
+              <hr />
+              <span class="msg">Your password is Secure.</span>
+            </div>
+          </div>
+          <div class="danger">
+            <div class="box">
+              <span class="headmsg">⚠ Danger</span>
+              <hr />
+              <span class="msg"
+                >Your Password is Compromised.</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      $(document).ready(function () {
+        $(".input").keyup(function () {
+          var pas = $(".input").val();
+          $(".para").html(pas);
+          if (pas == "") {
+            $(".content").css("display", "none");
+            $(".message").css("display", "none");
+          } else if (pas.length >= 0) {
+            $(".content").css("display", "block");
+            $(".message").css("display", "block");
+          }
+          $.ajax({
+            url: "https://raw.githubusercontent.com/danielmiessler/SecLists/master/Passwords/Common-Credentials/10-million-password-list-top-500.txt",
+            success: function (passwords) {
+              msg = passwords.includes(pas);
+              if (msg == true) {
+                $(".danger").css("display", "block");
+                $(".success").css("display", "none");
+              } else if (msg == false) {
+                $(".success").css("display", "block");
+                $(".danger").css("display", "none");
+              }
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>
